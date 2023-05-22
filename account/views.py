@@ -11,14 +11,15 @@ from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 
-class SignUp(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = SignUpSerializer
+class SignUp(generics.CreateAPIView): 
+    queryset = User.objects.all() 
+    serializer_class = SignUpSerializer 
     
-    def post(self, request, *args, **kwargs):
-        serializer = SignUpSerializer(data=request.data)
+    def post(self, request, *args, **kwargs): 
+        serializer = SignUpSerializer(data=request.data) 
         if serializer.is_valid():
             serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
+            serializer.validated_data['username'] = serializer.validated_data['email']
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         

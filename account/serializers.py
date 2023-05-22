@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 
 # make here pass hash password
 
@@ -18,7 +18,6 @@ class SignUpSerializer(serializers.ModelSerializer):
         }
         
         
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
