@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
+from rest_framework.permissions import IsAuthenticated
+
 from .models import Job
 from .serializers import JobSerializers
 from .filters import JobsFilter
@@ -37,6 +39,12 @@ class Jobs(APIView):
         })
     
     def post(self, request):
+         
+        # before post user must be authenticated
+        permission_classes = [IsAuthenticated]
+        
+        # request.data['user'] = request.user
+        
         data = request.data
         job = Job.objects.create(**data)
         
@@ -56,7 +64,16 @@ class JobDetail(APIView):
  
     
     def put(self, request, pk):
+        
+        # before put user must be authenticated
+        permission_classes = [IsAuthenticated]
+        
         job = get_object_or_404(Job, pk=pk)
+        
+        # check if user is the owner of the job then he can only update this job.
+        if job.user != request.user:
+            return Response({"message": "You are not authorized to update this job."}, status=status.HTTP_401_UNAUTHORIZED)
+        
         
         job.title = request.data['title']
         job.description = request.data['description']
@@ -77,7 +94,15 @@ class JobDetail(APIView):
     
     
     def delete(self, request, pk):
+        
+        # before delete user must be authenticated
+        permission_classes = [IsAuthenticated]
+        
         job = get_object_or_404(Job, pk=pk)
+        
+        # check if user is the owner of the job then he can only delete this job.
+        if job.user != request.user:
+            return Response({"message": "You are not authorized to delete this job."}, status=status.HTTP_401_UNAUTHORIZED)
 
         job.delete()
         return Response( {"Job deleted "}, status=status.HTTP_204_NO_CONTENT)

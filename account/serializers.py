@@ -20,6 +20,11 @@ class SignUpSerializer(serializers.ModelSerializer):
         
 
 class UserSerializer(serializers.ModelSerializer):
+    resume = serializers.CharField(source='userprofile.resume', allow_blank=True, required=False)
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'username']
+        fields = ['first_name', 'last_name', 'email', 'username', 'resume']
+        
+        extra_kwargs = {
+            'username': {'required': False}
+        }
