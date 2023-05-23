@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view, permission_classes
 
 
 
-# Create your views here.
+# Create your views here.............
 
 class SignUp(generics.CreateAPIView): 
     queryset = User.objects.all() 
@@ -36,12 +36,19 @@ class UserView(APIView):
         return Response(serializer.data)
     
     def put(self, request):
-        # before update data user must be authenticated
+        # before update data user must be authenticated.
         permission_classes = [IsAuthenticated]
         
-        serializer = UserSerializer(request.user, data=request.data)
+        user = request.user
+        data = request.data
+        
+        user.resume = data['resume']
+        
+        serializer = UserSerializer(user, data=data)
         if serializer.is_valid():
-           serializer.validated_data['username'] = serializer.validated_data['email'] # making username same as email
+        #    print("resume ----------", serializer.data)
+           
+        #    serializer.validated_data['username'] = serializer.validated_data['email'] # making username same as email
            serializer.save()
            return Response(serializer.data)
         
@@ -53,6 +60,11 @@ class UserView(APIView):
         
         request.user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+    
+    
+    
     
     
 @api_view(['GET'])
