@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password
 
-from rest_framework.parsers import MultiPartParser, FormParser
-
 from rest_framework.decorators import api_view, permission_classes
 
 
@@ -31,9 +29,9 @@ class SignUp(generics.CreateAPIView):
     
     
 class UserView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser]
     
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     
     def get(self, request):
         serializer = UserSerializer(request.user)
@@ -67,34 +65,30 @@ class UserView(APIView):
         
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
     def put(self, request):
-        # Before updating data, the user must be authenticated.
         permission_classes = [IsAuthenticated]
-
         user = request.user
         data = request.data
 
-        user.first_name = data.get('first_name', user.first_name)
-        user.last_name = data.get('last_name', user.last_name)
-        user.email = data.get('email', user.email)
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.email = data['email']
         user.password = make_password(data['password'])
 
         # Upload resume
-        resume = request.FILES.get('resume', None)
+        resume = request.FILES['resume']
 
         if resume is None:
             return Response({'detail': 'Please upload a resume'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Attach resume to user
-        user.resume = resume
+        # Save user object
         user.save()
 
-        serializer = UserSerializer(user, many=False)
+        serializer = UserSerializer(user)
+        
+        print("resume getting : ", serializer.data['resume'])
 
-        print("resume: ", serializer.data)
-
-        return Response(serializer.data) 
+        return Response(serializer.data)
     
     
     

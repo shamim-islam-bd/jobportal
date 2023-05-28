@@ -95,3 +95,14 @@ class Job(models.Model):
 
 #     self.point = Point(lng, lat)
 #     super(Job, self).save(*args, **kwargs)
+
+
+
+class CanditesApplied(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    resume = models.FileField(max_length=100, null=True)
+    appliedAt = models.DateTimeField(auto_now_add=True)
+    
+    
+    
