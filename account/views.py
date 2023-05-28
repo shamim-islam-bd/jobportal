@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password
 
+from rest_framework.parsers import MultiPartParser, FormParser
+
 from rest_framework.decorators import api_view, permission_classes
 
 
@@ -29,30 +31,72 @@ class SignUp(generics.CreateAPIView):
     
     
 class UserView(APIView):
-    permission_classes = (IsAuthenticated,)
+    parser_classes = [MultiPartParser, FormParser]
+    
+    # permission_classes = (IsAuthenticated,)
     
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
     
-    def put(self, request):
+    # def put(self, request):
         # before update data user must be authenticated.
         permission_classes = [IsAuthenticated]
         
         user = request.user
         data = request.data
         
-        user.resume = data['resume']
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.email = data['email']
+        user.password = make_password(data['password'])
         
-        serializer = UserSerializer(user, data=data)
-        if serializer.is_valid():
-        #    print("resume ----------", serializer.data)
-           
-        #    serializer.validated_data['username'] = serializer.validated_data['email'] # making username same as email
-           serializer.save()
-           return Response(serializer.data)
+        # upload resume
+        resume = request.FILES['resume']
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if resume == '':
+            return Response({'detail': 'Please upload resume'}, status=status.HTTP_400_BAD_REQUEST)
+        if resume:
+            user.resume = resume
+        
+        serializer = UserSerializer(user, many=False)
+        
+        print("resume: ", serializer.data)
+        
+        return Response(serializer.data)
+        
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    def put(self, request):
+        # Before updating data, the user must be authenticated.
+        permission_classes = [IsAuthenticated]
+
+        user = request.user
+        data = request.data
+
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        user.email = data.get('email', user.email)
+        user.password = make_password(data['password'])
+
+        # Upload resume
+        resume = request.FILES.get('resume', None)
+
+        if resume is None:
+            return Response({'detail': 'Please upload a resume'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Attach resume to user
+        user.resume = resume
+        user.save()
+
+        serializer = UserSerializer(user, many=False)
+
+        print("resume: ", serializer.data)
+
+        return Response(serializer.data) 
+    
+    
     
     def delete(self, request):
         # before delete user must be authenticated
@@ -60,10 +104,6 @@ class UserView(APIView):
         
         request.user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    
-    
-    
     
     
     
