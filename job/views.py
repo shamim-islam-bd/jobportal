@@ -55,14 +55,12 @@ class Jobs(APIView):
     
     
 class JobDetail(APIView):
-    
     def get(self, request, pk):
         job = get_object_or_404(Job, pk=pk)
         
         serializer = JobSerializers(job, many=False)
         return Response(serializer.data)
  
-    
     def put(self, request, pk):
         
         # before put user must be authenticated
@@ -91,7 +89,6 @@ class JobDetail(APIView):
         serializer = JobSerializers(job, many=False)
         
         return Response(serializer.data)
-    
     
     def delete(self, request, pk):
         

@@ -98,7 +98,7 @@ class Job(models.Model):
 
 
 
-class CanditesApplied(models.Model):
+class CandidateApplied(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     resume = models.FileField(max_length=100, null=True)
