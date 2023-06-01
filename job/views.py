@@ -1,6 +1,6 @@
-
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from django.utils import timezone
 from rest_framework import status 
 from django.db.models import Avg, Count, Min, Sum, Max
 from django.shortcuts import get_object_or_404
@@ -14,7 +14,6 @@ from .serializers import JobSerializers
 from .filters import JobsFilter
 
 # Create your views here.
-
 class Jobs(APIView):
     def get(self, request):
         
@@ -52,8 +51,6 @@ class Jobs(APIView):
         return Response(serializer.data)
     
         
-    
-    
 class JobDetail(APIView):
     def get(self, request, pk):
         job = get_object_or_404(Job, pk=pk)
@@ -104,8 +101,7 @@ class JobDetail(APIView):
         job.delete()
         return Response( {"Job deleted "}, status=status.HTTP_204_NO_CONTENT)
     
-    
-    
+       
 class JobStats(APIView):
     def get(self, request, topic):
 
@@ -124,3 +120,27 @@ class JobStats(APIView):
         )
         
         return Response(start)
+
+
+
+class ApplyToJob(APIView): 
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, pk):
+        job = get_object_or_404(Job, pk=pk)
+        
+        # check if resume is uploaded or not
+        if not request.user.userprofile.resume:
+            return Response({"message": "Please upload your resume first."}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # check if user already applied to this job then he can not apply to this job again.
+        if job.candidateapplied_set.filter(user=request.user).exists():
+            return Response({"message": "You already applied to this job."}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # check if job last date is expired then user can not apply to this job.
+        if job.lastDate < timezone.now():
+            return Response({"message": "Job last date is expired."}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        
+        job.candidateapplied_set.create(user=request.user)
+        return Response({"message": "You applied to this job successfully."}, status=status.HTTP_200_OK)

@@ -6,10 +6,13 @@ from .serializers import SignUpSerializer, UserSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password
-
+from rest_framework.parsers import FileUploadParser
 from rest_framework.decorators import api_view, permission_classes
 
+from rest_framework import viewsets
 
+from .models import UserProfile
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.............
 
@@ -37,36 +40,10 @@ class UserView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
     
-    # def put(self, request):
-        # before update data user must be authenticated.
-        permission_classes = [IsAuthenticated]
-        
-        user = request.user
-        data = request.data
-        
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
-        user.email = data['email']
-        user.password = make_password(data['password'])
-        
-        # upload resume
-        resume = request.FILES['resume']
-        
-        if resume == '':
-            return Response({'detail': 'Please upload resume'}, status=status.HTTP_400_BAD_REQUEST)
-        if resume:
-            user.resume = resume
-        
-        serializer = UserSerializer(user, many=False)
-        
-        print("resume: ", serializer.data)
-        
-        return Response(serializer.data)
-        
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def put(self, request):
         permission_classes = [IsAuthenticated]
+        
         user = request.user
         data = request.data
 
@@ -75,21 +52,20 @@ class UserView(APIView):
         user.email = data['email']
         user.password = make_password(data['password'])
 
-        # Upload resume
-        resume = request.FILES['resume']
+        # Update resume
+        resume = request.FILES.get('resume')
+        # print("resume: ", resume)
 
-        if resume is None:
-            return Response({'detail': 'Please upload a resume'}, status=status.HTTP_400_BAD_REQUEST)
+        if resume:
+            user.resume = resume
+            user.save()
 
         # Save user object
         user.save()
 
-        serializer = UserSerializer(user)
-        
-        print("resume getting : ", serializer.data['resume'])
-
+        serializer = UserSerializer(user, many=False)
+        # print("resume: ", serializer.data)
         return Response(serializer.data)
-    
     
     
     def delete(self, request):
@@ -110,3 +86,30 @@ def currentUser(request):
 
     
     
+class uploadResume(APIView):
+    
+      parser_class = (FileUploadParser, )
+ 
+      permission_classes = [IsAuthenticated]
+    
+      def put(self, request):
+
+        #  update resume of user with resume
+        user = request.user
+        data = request.data
+        
+        resume = request.FILES['resume']
+        
+        print("resume: ", resume)
+        
+        if resume == '':
+            return Response({'detail': 'Please upload resume'}, status=status.HTTP_400_BAD_REQUEST)
+        if resume:
+            user.resume = resume
+            user.save()
+            
+        serializer = UserSerializer(user, many=False)
+        
+        # print("resume: ", serializer.data)
+        
+        return Response(serializer.data)
