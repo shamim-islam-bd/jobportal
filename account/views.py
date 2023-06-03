@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,11 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password
 from rest_framework.parsers import FileUploadParser
 from rest_framework.decorators import api_view, permission_classes
-
-from rest_framework import viewsets
-
-from .models import UserProfile
-from rest_framework.parsers import MultiPartParser, FormParser
 
 # Create your views here.............
 
@@ -33,13 +27,11 @@ class SignUp(generics.CreateAPIView):
     
 class UserView(APIView):
     # parser_classes = [MultiPartParser]
-    
     permission_classes = (IsAuthenticated,)
     
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
-    
     
     def put(self, request):
         permission_classes = [IsAuthenticated]
@@ -82,23 +74,19 @@ class UserView(APIView):
 def currentUser(request):
     user = UserSerializer(request.user)
     return Response(user.data)
-
-
     
     
 class uploadResume(APIView):
-    
       parser_class = (FileUploadParser, )
  
-      permission_classes = [IsAuthenticated]
+      permission_classes = [ IsAuthenticated ]
     
       def put(self, request):
-
         #  update resume of user with resume
         user = request.user
         data = request.data
         
-        resume = request.FILES['resume']
+        resume = request.FILES.get('resume')
         
         print("resume: ", resume)
         

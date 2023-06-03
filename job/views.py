@@ -9,6 +9,8 @@ from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.permissions import IsAuthenticated
 
+from .models import CandidateApplied
+from .serializers import CandidedAppliedSerializers
 from .models import Job
 from .serializers import JobSerializers
 from .filters import JobsFilter
@@ -130,8 +132,8 @@ class ApplyToJob(APIView):
         job = get_object_or_404(Job, pk=pk)
         
         # check if resume is uploaded or not
-        if not request.user.userprofile.resume:
-            return Response({"message": "Please upload your resume first."}, status=status.HTTP_401_UNAUTHORIZED)
+        # if not request.user.userprofile.resume:
+        #     return Response({"message": "Please upload your resume first."}, status=status.HTTP_401_UNAUTHORIZED)
         
         # check if user already applied to this job then he can not apply to this job again.
         if job.candidateapplied_set.filter(user=request.user).exists():
@@ -143,4 +145,21 @@ class ApplyToJob(APIView):
         
         
         job.candidateapplied_set.create(user=request.user)
-        return Response({"message": "You applied to this job successfully."}, status=status.HTTP_200_OK)
+        return Response({
+              "message": "You applied to this job successfully.",   
+            #   "job": JobSerializers(job, many=False).data
+        }, status=status.HTTP_200_OK)
+        
+        
+        
+        # get ApplyToJob details 
+    def get(self, request):
+      args = { 'user_id': request.user.id}
+      
+        # get all jobs applied by user
+      jobs = CandidateApplied.objects.filter(**args)
+      
+      serializer = CandidedAppliedSerializers(jobs, many=True)
+      
+      return Response(serializer.data)
+        
