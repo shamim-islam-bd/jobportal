@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Jobs, JobDetail, JobStats, ApplyToJob, CurrentUserAppliedJob, isAppliedToJob, CurrentUserJobs
+from .views import Jobs, JobDetail, JobStats, ApplyToJob, CurrentUserAppliedJob, isAppliedToJob, CurrentUserJobs, CandidatesApplied
 
 urlpatterns = [
     path('jobs/', Jobs.as_view(), name="jobs"),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('me/jobs/applied/', CurrentUserAppliedJob.as_view(), name='current_user_applied_Job'),
     
     path('jobs/<str:pk>/check/', isAppliedToJob.as_view(), name="isAppilied_to_job"),
+    
+    path('jobs/<str:pk>/candidates/', CandidatesApplied.as_view(), name='job-candidates')
 ]

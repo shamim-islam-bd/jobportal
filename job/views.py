@@ -186,3 +186,19 @@ class isAppliedToJob(APIView):
         applied = job.candidateapplied_set.filter(user=request.user).exists()
         
         return Response(applied)
+
+
+class CandidatesApplied(APIView): 
+    permission_classes = [IsAuthenticated]
+    def get(self, request, pk):
+        job = get_object_or_404(Job, pk=pk)
+        
+        # check if user is the owner of the job then he can only see the candidates applied to this job.
+        if job.user != request.user:
+            return Response({"message": "You are not authorized to see the candidates applied to this job."}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        # get all candidates applied to this job
+        candidates = job.candidateapplied_set.all()
+        serializer = CandidedAppliedSerializers(candidates, many=True)
+        
+        return Response(serializer.data)
