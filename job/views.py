@@ -156,9 +156,33 @@ class CurrentUserAppliedJob(APIView):
     def get(self, request):
       args = { 'user_id': request.user.id}
     
-        # get all jobs applied by user
+      # get all jobs applied by user
       jobs = CandidateApplied.objects.filter(**args)
       serializer = CandidedAppliedSerializers(jobs, many=True)
       
       return Response(serializer.data)
+  
         
+        
+class CurrentUserJobs(APIView): 
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        args = { 'user': request.user.id}
+        
+        # get all jobs applied by user
+        jobs = Job.objects.filter(**args)
+        serializer = JobSerializers(jobs, many=True)
+        
+        return Response(serializer.data)        
+        
+        
+        
+class isAppliedToJob(APIView): 
+    permission_classes = [IsAuthenticated]
+    def get(self, request, pk):
+        job = get_object_or_404(Job, pk=pk)
+        
+        # check if user already applied to this job then he can not apply to this job again.
+        applied = job.candidateapplied_set.filter(user=request.user).exists()
+        
+        return Response(applied)
