@@ -127,7 +127,6 @@ class JobStats(APIView):
 
 class ApplyToJob(APIView): 
     permission_classes = [IsAuthenticated]
-    
     def post(self, request, pk):
         job = get_object_or_404(Job, pk=pk)
         
@@ -148,17 +147,17 @@ class ApplyToJob(APIView):
         return Response({
               "message": "You applied to this job successfully.",   
             #   "job": JobSerializers(job, many=False).data
-        }, status=status.HTTP_200_OK)
+        }, status=status.HTTP_200_OK)   
         
         
-        
-        # get ApplyToJob details 
+class CurrentUserAppliedJob(APIView):
+    permission_classes = [IsAuthenticated]
+    # get Applied Job details 
     def get(self, request):
       args = { 'user_id': request.user.id}
-      
+    
         # get all jobs applied by user
       jobs = CandidateApplied.objects.filter(**args)
-      
       serializer = CandidedAppliedSerializers(jobs, many=True)
       
       return Response(serializer.data)
