@@ -3,8 +3,7 @@ from django.contrib import admin
 from django.urls import path , include 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenVerifyView
 
-from django.conf import settings
-from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,7 +12,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view()),
     path('api/token/verify/', TokenVerifyView.as_view()),
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += staticfiles_urlpatterns()
 
 handler500 =  'utils.error_views.handler500'
 error_404 =  'utils.error_views.error_404'
