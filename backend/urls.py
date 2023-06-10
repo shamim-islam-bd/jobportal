@@ -11,7 +11,7 @@ urlpatterns = [
     path('api/', include('job.urls')),
     path('api/', include('account.urls')),
     path('api/token/', TokenObtainPairView.as_view()),
-    path('api/token/verify', TokenVerifyView.as_view()),
+    path('api/token/verify/', TokenVerifyView.as_view()),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -74,7 +74,7 @@ class Job(models.Model):
     salary = models.IntegerField(default=1, validators=[
         MinValueValidator(1), MaxValueValidator(1000000)]
     )
-    positon = models.IntegerField(default=1)
+    position = models.IntegerField(default=1)
     company = models.CharField(max_length=100, null=True)
     # point = gismodels.PointField(default=Point(0.0, 0.0))
     lastDate = models.DateTimeField(default=return_date_time, null=True)

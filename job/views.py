@@ -25,7 +25,7 @@ class Jobs(APIView):
         count = filterset.qs.count() # count total number of jobs
         
         # pagination applied
-        perPage = 2
+        perPage = 3
         paginator = PageNumberPagination()
         paginator.page_size = perPage
         result_page = paginator.paginate_queryset(filterset.qs, request)
@@ -40,7 +40,6 @@ class Jobs(APIView):
         })
     
     def post(self, request):
-         
         # before post user must be authenticated
         permission_classes = [IsAuthenticated]
         
@@ -57,8 +56,10 @@ class JobDetail(APIView):
     def get(self, request, pk):
         job = get_object_or_404(Job, pk=pk)
         
+        candidates = job.candidateapplied_set.all().count()
+        
         serializer = JobSerializers(job, many=False)
-        return Response(serializer.data)
+        return Response({"job": serializer.data, "candidates": candidates})
  
     def put(self, request, pk):
         
@@ -144,9 +145,11 @@ class ApplyToJob(APIView):
         
         
         job.candidateapplied_set.create(user=request.user)
+        
         return Response({
               "message": "You applied to this job successfully.",   
-            #   "job": JobSerializers(job, many=False).data
+              "applied": True,
+              "job_id": job.id,
         }, status=status.HTTP_200_OK)   
         
         
