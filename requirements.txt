@@ -15,7 +15,6 @@ django-storages==1.13.2
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 future==0.18.3
-GDAL @ file:///G:/Python%20Django/JobPortal/backend/GDAL-3.4.3-cp310-cp310-win_amd64.whl#sha256=9893da5532a6c5dadc1fc3bc402ae29d161b7cf190d778f129da84d0e50baa29
 geocoder==1.38.1
 gunicorn==20.1.0
 idna==3.4
