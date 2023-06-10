@@ -2,3 +2,6 @@ admin acess:
 
 username: shamimislam
 pass: adminxyz49
+
+add all the requirements in requirements.txt file with this command line:
+pip freeze > requirements.txt 

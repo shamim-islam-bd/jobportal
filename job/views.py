@@ -6,7 +6,6 @@ from django.db.models import Avg, Count, Min, Sum, Max
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-
 from rest_framework.permissions import IsAuthenticated
 
 from .models import CandidateApplied
@@ -77,12 +76,12 @@ class JobDetail(APIView):
         job.description = request.data['description']
         job.email = request.data['email']
         job.address = request.data['address']
-        job.jobType = request.data['job']
+        job.jobType = request.data['jobType']
         job.education = request.data['education']
         job.industry = request.data['industry']
         job.experience = request.data['experience']
         job.salary = request.data['salary']
-        job.positons = request.data['positons']
+        job.position = request.data['position']
         job.company = request.data['company']
         
         job.save()
@@ -116,14 +115,13 @@ class JobStats(APIView):
         
         start = jobs.aggregate(
             total__jobs = Count('title'),
-            avg__position = Avg('positon'),
+            avg__position = Avg('position'),
             Avg__salary = Avg('salary'),
             min__salary = Min('salary'),
             max__salary = Max('salary'),
         )
         
         return Response(start)
-
 
 
 class ApplyToJob(APIView): 
@@ -166,7 +164,6 @@ class CurrentUserAppliedJob(APIView):
       return Response(serializer.data)
   
         
-        
 class CurrentUserJobs(APIView): 
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -177,7 +174,6 @@ class CurrentUserJobs(APIView):
         serializer = JobSerializers(jobs, many=True)
         
         return Response(serializer.data)        
-        
         
         
 class isAppliedToJob(APIView): 
