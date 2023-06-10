@@ -20,7 +20,8 @@ SECRET_KEY =  os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =  os.getenv("DEBUG") == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -36,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'rest_framework',
     'corsheaders',
-    # 'storages',
     'django_filters',
     'job.apps.JobConfig',
     'account.apps.AccountConfig',
@@ -95,12 +95,9 @@ DATABASES = {
 
 
 
-
-
-
 # CUSTOM SETTINGS FOR RENDER DEPLOYMENT
-if os.getenv('ENVIRONMENT') == 'production': 
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# if os.getenv('ENVIRONMENT') == 'production': 
+#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
     
     # AWS S3 settings
     # AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
@@ -144,7 +141,7 @@ SIMPLE_JWT = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    # 'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
 
