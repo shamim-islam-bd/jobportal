@@ -8,6 +8,57 @@ JobPortal is a Fullstack Base Project Based on Python Django Django_rest_framewo
 
 
 
+## Screenshots
+
+Home: 
+
+![App Screenshot](https://i.ibb.co/m48SkrV/Home.png)
+
+Menu: 
+
+![App Screenshot](https://i.ibb.co/dpfMjjZ/menu.png)
+
+My jobs: 
+
+User can manage all things related to job.
+Create, Update, delete.
+
+![App Screenshot](https://i.ibb.co/PCF7n0X/myjobs.png)
+
+Job Details: 
+
+![App Screenshot](https://i.ibb.co/hyjJh4h/Jobdetails.png)
+
+Job Update: 
+
+![App Screenshot](https://i.ibb.co/4MJRdh0/post-updatejobs.png)
+
+Stats or Query job by value: 
+
+![App Screenshot](https://i.ibb.co/vVm0qXj/stats.png)
+
+Applied Jobs: 
+
+![App Screenshot](https://i.ibb.co/8BXt8Df/appliedjobs.png)
+
+filter Jobs: 
+
+![App Screenshot](https://i.ibb.co/C10KJnb/filter.png)
+
+User Profile Manage: 
+
+![App Screenshot](https://i.ibb.co/FqLxXjK/user-profile-update.png)
+
+Search Jobs: 
+
+![App Screenshot](https://i.ibb.co/9YdZwwP/search-jobs.png)
+
+Upload Resume: 
+
+![App Screenshot](https://i.ibb.co/2sKT5s6/resumeupload.png)
+
+
+
 ## API Reference
 
 #### Get all Jobs
@@ -198,6 +249,40 @@ Body: Form-data:
 | :-------- | :------- | :------------------------- |
 | `resume` | `CyberSecurity.pdf` |  ` ` |
 
+## Installation
+
+
+New starter Project with python Django steps : 
+
+```bash
+1. Create project folder & open with vsCode
+2. python -m venv menv         - will create a virtual environment folder
+3. pip install django        - install django in a same dir where menv exist.
+3. menv\Scripts\activate       - it'll active your activate your venv
+4. django-admin startproject myprojectname   -it'll create a project folder
+5. pip install django djangorestframework    - it'll install djando
+6. python manage.py runserver                - run server
+```
+
+
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`SECRET_KEY`='SECRET_KEY'
+
+`DEBUG`=True
+`DB_NAME`="jobportal"
+`DB_USER`=postgres
+`DB_PASSWORD`=shamim
+`DB_HOST`=localhost
+`DB_PORT`=5432
+
+`GEOC0DER_API`=C7Y4PMK7lA5OrflsEXrVpiqR0AT3K7OT
+
+
+
 ## Developer  :
 
 - [@shamim-islam-bd](https://github.com/shamim-islam-bd)
@@ -213,53 +298,12 @@ Body: Form-data:
 [![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/Shamim_islam_bd)
 
 
-## Screenshots
+## License
 
-Home: 
+[MIT](https://choosealicense.com/licenses/mit/)
 
-![App Screenshot](https://i.ibb.co/m48SkrV/Home.png)
 
-Menu: 
 
-![App Screenshot](https://i.ibb.co/dpfMjjZ/menu.png)
 
-My jobs: 
-
-User can manage all things related to job.
-Create, Update, delete.
-
-![App Screenshot](https://i.ibb.co/PCF7n0X/myjobs.png)
-
-Job Details: 
-
-![App Screenshot](https://i.ibb.co/hyjJh4h/Jobdetails.png)
-
-Job Update: 
-
-![App Screenshot](https://i.ibb.co/4MJRdh0/post-updatejobs.png)
-
-Stats or Query job by value: 
-
-![App Screenshot](https://i.ibb.co/vVm0qXj/stats.png)
-
-Applied Jobs: 
-
-![App Screenshot](https://i.ibb.co/8BXt8Df/appliedjobs.png)
-
-filter Jobs: 
-
-![App Screenshot](https://i.ibb.co/C10KJnb/filter.png)
-
-User Profile Manage: 
-
-![App Screenshot](https://i.ibb.co/FqLxXjK/user-profile-update.png)
-
-Search Jobs: 
-
-![App Screenshot](https://i.ibb.co/9YdZwwP/search-jobs.png)
-
-Upload Resume: 
-
-![App Screenshot](https://i.ibb.co/2sKT5s6/resumeupload.png)
 
 
