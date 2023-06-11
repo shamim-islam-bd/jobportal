@@ -21,7 +21,7 @@ SECRET_KEY =  os.getenv('SECRET_KEY')
 DEBUG =  os.getenv("DEBUG") == 'True'
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] # for deploy render
 
 
 # Application definition
@@ -74,35 +74,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
-# Database
-
-DATABASES = {
-    'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
-}
-
-
-# Local Postgres Database
+# Database for deploy render
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),
-#     }
+#     'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
 # }
 
 
+# Local Postgres Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
+}
 
-# CUSTOM SETTINGS FOR RENDER DEPLOYMENT
-# if os.getenv('ENVIRONMENT') == 'production': 
-#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-    
-    # AWS S3 settings
-    # AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    
-    
+
 
 # Password validation
 
@@ -141,7 +131,7 @@ SIMPLE_JWT = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    # 'http://localhost:3000',
+    'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
 
@@ -179,8 +169,6 @@ MEDIA_URL = 'media/'
 
 
 VIRTUAL_ENV_BASE = os.getenv('VIRTUAL_ENV')
-
-print("VIRTUAL_ENV_BASE ---- ",VIRTUAL_ENV_BASE )
 
 GEOS_LIBRARY_PATH = VIRTUAL_ENV_BASE + '/Lib/site-packages/osgeo/geos_c.dll'
 GDAL_LIBRARY_PATH = VIRTUAL_ENV_BASE + '/Lib/site-packages/osgeo/gdal304.dll'
