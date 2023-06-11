@@ -43,8 +43,8 @@ User Can filter the jobs as their needs.
  POST {{DOMAIN}}/api/jobs/
 ```
 
-| Value | Attributes  |
-:--------  -----------------
+| Value |  attributes  | Description                |
+| :-------- | :------- | :------------------------- |
 | `title`  | `attributes ` | **Required**. add title|
 | `description`  | `attributes ` | **Required**. add description |
 | `email`  | `attributes ` | **Required**. add email |
@@ -261,7 +261,5 @@ Search Jobs:
 Upload Resume: 
 
 ![App Screenshot](https://i.ibb.co/2sKT5s6/resumeupload.png)
-
-
 
 
